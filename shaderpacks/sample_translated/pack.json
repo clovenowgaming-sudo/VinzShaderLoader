@@ -1,0 +1,6 @@
+{
+  "name": "sample_translated",
+  "description": "Demo pack: bloom + vignette + warm tint, translated from an Iris/OptiFine-style final.fsh down to GLSL ES 1.00 by tools/shader_translate.py.",
+  "source": "shaderpacks/sample_source/final.fsh",
+  "single_pass_only": true
+}

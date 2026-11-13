@@ -1,0 +1,37 @@
+name: Build libvinzshader.so
+
+on:
+  push:
+    paths:
+      - 'native/**'
+      - '.github/workflows/build-native.yml'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Android NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r26d
+
+      - name: Configure (CMake, armeabi-v7a)
+        run: |
+          cmake -S native -B build \
+            -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake \
+            -DANDROID_ABI=armeabi-v7a \
+            -DANDROID_PLATFORM=android-19 \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release -j
+
+      - name: Upload libvinzshader.so
+        uses: actions/upload-artifact@v4
+        with:
+          name: libvinzshader-armeabi-v7a
+          path: build/libvinzshader.so
